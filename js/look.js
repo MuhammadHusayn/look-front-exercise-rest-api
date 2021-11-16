@@ -3,6 +3,9 @@ const ordersList = document.querySelector('.orders-list')
 const clientId = document.querySelector('#clientId')
 const userHeader = document.querySelector('#userHeader')
 const foodsSelect = document.querySelector('#foodsSelect')
+const userAddForm = document.querySelector('#userAdd')
+const usernameInput = document.querySelector('#usernameInput')
+const telephoneInput = document.querySelector('#telephoneInput')
 const hostName = 'http://192.168.192.151:8000'
 
 
@@ -15,6 +18,8 @@ function createElements(...array) {
 async function renderUsers() {
 	const response = await fetch(hostName + '/users')
 	const users = await response.json()
+
+	customersList.innerHTML = null
 	for (let user of users) {
 		const [li, span, a] = createElements('li', 'span', 'a')
 
@@ -75,6 +80,33 @@ async function renderFoods() {
 		option.textContent = food.food_name
 
 		foodsSelect.append(option)
+	}
+
+}
+
+userAddForm.onsubmit = async event => {
+	event.preventDefault()
+	if (!usernameInput.value || !telephoneInput.value) return
+
+	try {
+		await fetch(hostName + '/users', {
+			method: "POST",
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				username: usernameInput.value,
+				phone: telephoneInput.value
+			})
+		})
+
+		usernameInput.value = null
+		telephoneInput.value = null
+
+		renderUsers()
+
+	} catch (error) {
+		alert(error.message)
 	}
 
 }

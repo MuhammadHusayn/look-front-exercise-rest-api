@@ -8,7 +8,7 @@ const usernameInput = document.querySelector('#usernameInput')
 const telephoneInput = document.querySelector('#telephoneInput')
 const foodsForm = document.querySelector('#foodsForm')
 const foodsCount = document.querySelector('#foodsCount')
-const hostName = 'http://192.168.192.151:8000'
+const hostName = 'https://look-backend.herokuapp.com/'
 
 
 function createElements(...array) {

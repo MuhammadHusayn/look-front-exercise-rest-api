@@ -2,21 +2,22 @@ const customersList = document.querySelector('.customers-list')
 const ordersList = document.querySelector('.orders-list')
 const clientId = document.querySelector('#clientId')
 const userHeader = document.querySelector('#userHeader')
-const hostName = 'http://192.168.96.151:8000'
+const foodsSelect = document.querySelector('#foodsSelect')
+const hostName = 'http://192.168.192.151:8000'
 
 
-function createElements (...array) {
-	return array.map( el => {
+function createElements(...array) {
+	return array.map(el => {
 		return document.createElement(el)
-	} )
+	})
 }
 
-async function renderUsers () {
+async function renderUsers() {
 	const response = await fetch(hostName + '/users')
 	const users = await response.json()
-	for(let user of users) {
+	for (let user of users) {
 		const [li, span, a] = createElements('li', 'span', 'a')
-		
+
 		li.className = 'customer-item'
 		span.className = 'customer-name'
 		a.className = 'customer-phone'
@@ -38,15 +39,15 @@ async function renderUsers () {
 }
 
 
-async function renderOrders (userId) {
+async function renderOrders(userId) {
 	const response = await fetch(hostName + '/orders/' + userId)
 	const orders = await response.json()
 
 	ordersList.innerHTML = null
 
-	for(let order of orders) {
+	for (let order of orders) {
 		const [li, img, div, foodName, foodCount] = createElements('li', 'img', 'div', 'span', 'span')
-		
+
 		li.className = 'order-item'
 		foodName.className = 'order-name'
 		foodCount.className = 'order-count'
@@ -63,4 +64,20 @@ async function renderOrders (userId) {
 
 }
 
+async function renderFoods() {
+	const response = await fetch(hostName + '/foods')
+	const foods = await response.json()
+
+	for (let food of foods) {
+		const [option] = createElements('option')
+
+		option.value = food.food_id
+		option.textContent = food.food_name
+
+		foodsSelect.append(option)
+	}
+
+}
+
+renderFoods()
 renderUsers()
